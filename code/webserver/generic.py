@@ -1,8 +1,10 @@
 from utils.logs import Logger
+import socket, sys, os
 
 class genericWebServer:
     IPAddress = "127.0.0.1"
-    portNumber = 80
+    portNumber = 8080
+    # logger # Will be set by constructor
 
     def __init__ (self, alog):
         self.logger = alog;
