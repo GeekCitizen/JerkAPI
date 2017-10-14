@@ -1,3 +1,16 @@
 {
-  "PortNumber":8080
+  "PortNumber":8080,
+  "scriptsRoot": "/opt",
+  "Services": [
+    {
+      "url": "/home/foo/bar/baz",
+      "method": "GET",
+      "type": "fetchurl",
+      "parameter": "http://host.domain.tld/getit"
+    },
+    {
+      "url": "/home/bar/foo/baz",
+      "method": "POST"
+    }
+  ]
 }

@@ -1,5 +1,5 @@
 class Logger:
-    logLvl = 0
+    logLvl = 1
     logLvlMax = 7
 
     strLvl0 = "FATAL: "
@@ -12,7 +12,7 @@ class Logger:
     strLvl7 = "DEBUG: "
 
     def __init__(self):
-        print ("Logger Initializing")
+        self.log(5, "Logger Initializing")
 
     def __str__(self):
         return "Current Log Level: " + str(self.logLvl)
