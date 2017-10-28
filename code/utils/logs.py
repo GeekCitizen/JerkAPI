@@ -2,14 +2,14 @@ class Logger:
     logLvl = 1
     logLvlMax = 7
 
-    strLvl0 = "FATAL: "
-    strLvl1 = "ALERT: "
-    strLvl2 = "CRITICAL: "
-    strLvl3 = "ERROR: "
-    strLvl4 = "WARNING: "
-    strLvl5 = "NOTICE: "
-    strLvl6 = "INFO: "
-    strLvl7 = "DEBUG: "
+    strLvl0 = "FATAL"
+    strLvl1 = "ALERT"
+    strLvl2 = "CRITICAL"
+    strLvl3 = "ERROR"
+    strLvl4 = "WARNING"
+    strLvl5 = "NOTICE"
+    strLvl6 = "INFO"
+    strLvl7 = "DEBUG"
 
     def __init__(self):
         self.log(5, "Logger Initializing")
@@ -57,7 +57,7 @@ class Logger:
 
     # Private method for logging
     def __logIT(self, lvl, msg):
-        print "MESSAGE - " + lvl + msg
+        print "[LOG - " + lvl + "] " + msg
     def __log0(self, msg):
         self.__logIT(self.strLvl0, msg)
     def __log1(self, msg):
