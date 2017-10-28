@@ -1,5 +1,4 @@
 {
-  "PortNumber":8080,
   "scriptsRoot": "/opt",
   "Services": [
     {

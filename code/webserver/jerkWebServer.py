@@ -1,5 +1,5 @@
 from webserver.generic import genericWebServer
-import json, os
+import json, os, urllib2
 
 class JerkWebServer (genericWebServer):
     URLs = {} # Will contain all URLs
@@ -10,8 +10,8 @@ class JerkWebServer (genericWebServer):
         #print "parsing" + jsonStr
         json1 = json.loads(jsonStr);
 
-        # Get PortNumber
-        self.__parseJSON_PortNumber(json1)
+        # Do not change portNumber for the moment
+        # self.__parseJSON_PortNumber(json1)
         self.__parseJSON_URLs(json1)
 
     def __parseJSON_PortNumber (self, json1): # Key is : PortNumber
@@ -92,3 +92,55 @@ class JerkWebServer (genericWebServer):
         except KeyError:
             self.logger.log(0, "Unable to add POST URL: URL does not exist" + str(blk))
             os._exit(1)
+
+    def retAnswerGet(self, req):
+        try:
+            #return str(self.URLsGET[str(req)])
+            tab = self.URLsGET[str(req)]
+            if tab[0] == "fetchurl":
+                return self.retAnswerGetFetchURL(req)
+            elif tab[0] == "bash":
+                return self.retAnswerGetBash(req)
+            else:
+                return "{\"Error\": \"UnknownError: The request URL uses a method that is not handled. That should not happen.\"}"
+        except KeyError:
+            return "{\"Error\": \"KeyError: This key does not exist.\"}"
+        except any as msg:
+            self.logger.log(0, "System error. Code: [" + str(msg[0])+ "] with message :[" + str(msg[1])+ "]")
+
+    def retAnswerGetFetchURL(self, req):
+        tab = self.URLsGET[str(req)]
+        self.logger.log(7, "Fetching URL " + tab[1])
+        try:
+            remoteContent = urllib2.urlopen(tab[1])
+            resp = remoteContent.read()
+            self.logger.log (7, "Got this answer while fetching : [[" + resp + "]]")
+            remoteContent.close()
+            return str(resp)
+        except any as msg:
+            self.logger.log(0, "System error. Code: [" + str(msg[0])+ "] with message :[" + str(msg[1])+ "]")
+
+
+    def retAnswerGetBash(self, req):
+        return "Bash is not yet implemented"
+
+
+    def retAnswer(self, reqSrc):
+        met, req = reqSrc.split('|')
+        if met == "GET":
+            return self.retAnswerGet(req)
+        elif met == "POST":
+            # Retrieve config block in POST Hashtable
+            return str(self.URLsPost[req])
+        else:
+            return "Method " + met + " not yet implemented"
+        #return ("You asked for " + req + " using method " + met)
+
+    def serveclient (self, conn):
+        question = conn.recv(4096)
+        # answer = "The question was [" + question.rstrip() + "]"
+
+        answer = self.retAnswer(question)
+
+        conn.sendall(answer)
+        conn.close()
